@@ -42,22 +42,38 @@ This is the one thing that needs a Google account the team controls (for example
 After this, prayer requests land in the Sheet within seconds, leaders read them in the site or in the
 Sheet, and photos posted by anyone appear on every phone.
 
-## 3. Put in the real schedule
+## 3. The schedule (already set, 30 Aug 2026)
 
-The site still carries a placeholder: Sunday 9:00 AM with a 60-minute call time.
+The site now carries the team's real Sunday timeline for two services, 10:00 AM and 4:00 PM:
 
-- **Quick way (leaders, on a phone):** Leader tools > Schedule. Enter the real service times, the
-  call time, and which team is on duty this Sunday. Tap **Save schedule**, then **Copy link** and
-  paste the link in the group chat. Anyone who opens that link sees the real countdown and rotation.
+| | 10:00 AM service | 4:00 PM service |
+|---|---|---|
+| Huddle Meeting (90 min before) | 8:30 AM | 2:30 PM |
+| Company Call (60 min before) | 9:00 AM | 3:00 PM |
+| Open Doors (15 min before) | 9:45 AM | 3:45 PM |
+| Service start | 10:00 AM | 4:00 PM |
+
+The home page counts down to whichever of these is next (Huddle first), shows all four steps, and
+moves on to the next service once it has started. Each usher's card shows the huddle time for the
+next service. The handbook's "Before the service" section lists the same times.
+
+If a time changes or a service is added:
+
+- **Quick way (leaders, on a phone):** Leader tools > Schedule. Edit the service times (one per line,
+  24-hour), the three "minutes before" values, and the team on duty. Tap **Save schedule**, then
+  **Copy link** and paste it in the group chat. Everyone who opens that link sees the new timeline.
 - **Permanent way (whoever maintains the file):** change the default so even the bare link is right.
   In `index.html` find
 
   ```js
-  let sched={day:0,times:["09:00"],callMins:60,duty:1,partner:2};
+  let sched={day:0,times:["10:00","16:00"],huddleMins:90,callMins:60,doorsMins:15,duty:1,partner:2};
   ```
 
-  `day` is 0 for Sunday, `times` is a list of 24-hour service times, `callMins` is the call time in
+  `day` is 0 for Sunday, `times` is the list of 24-hour service times, the three `Mins` values are
   minutes before the service, `duty` is the team on duty this week (1 to 4). Save and publish.
+
+One thing still to confirm with the leaders: **which team is on duty this Sunday** (the file says
+Team 1). Set it in Leader tools > Schedule and share the link, or change `duty` in the file.
 
 ## 4. Confirm five details with the Team Leader
 
@@ -140,6 +156,7 @@ calls a paid service.
 - [x] Repository created, changes publish automatically
 - [ ] Backend connected (`SETUP.md`), `API_ENDPOINT` set, status line says Connected
 - [ ] Leader key given to leaders only
-- [ ] Real service times and duty team set (Leader tools > Schedule, or the default in the file)
+- [x] Real service times set (10:00 AM and 4:00 PM; Huddle 90, Company Call 60, Open Doors 15 minutes before)
+- [ ] Team on duty this Sunday confirmed (Leader tools > Schedule, or `duty` in the file)
 - [ ] Five details confirmed with the Team Leader
 - [ ] Link posted in the team group chat, with "Add to Home screen" tip

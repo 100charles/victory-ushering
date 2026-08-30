@@ -202,6 +202,16 @@
   .cdwrap .who .kick{margin-bottom:7px}
   .cdwrap .who b{font-family:"Cormorant Garamond",serif;font-weight:700;font-size:26px;display:block;color:#F7FBFF}
   .cdwrap .who span{display:block;font-size:14px;color:var(--ink-soft);margin-top:4px}
+  .tline{display:grid;gap:5px;margin-top:14px}
+  .tline div{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-soft);padding:7px 10px;border-radius:10px;border:1px solid transparent}
+  .tline div b{font-family:"Inter",system-ui,sans-serif;font-weight:700;font-size:14px;color:#F4F9FF;min-width:72px}
+  .tline div.next{border-color:rgba(230,206,134,.45);background:rgba(230,206,134,.09);color:var(--ink)}
+  .tline div.next b{color:var(--gold)}
+  .tline div.past{opacity:.5}
+  .tline i{width:7px;height:7px;border-radius:50%;background:var(--ink-dim);flex:none}
+  .tline div.next i{background:var(--gold);box-shadow:0 0 0 4px rgba(230,206,134,.18)}
+  .cdtags{margin-top:12px;display:flex;gap:8px 12px;flex-wrap:wrap;align-items:center}
+  .cdtags .ontime{font-family:"Cinzel",serif;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
   .cdunits{display:flex;gap:8px}
   .cdu{min-width:62px;text-align:center;border:1px solid var(--line);border-radius:13px;padding:11px 8px;background:rgba(0,0,0,.22)}
   .cdu b{display:block;font-family:"Cormorant Garamond",serif;font-weight:700;font-size:25px;line-height:1;color:var(--gold)}
@@ -773,7 +783,7 @@ const TCOL={ice:"#3E93DF",gold:"#C9A24B",aqua:"#2E9C9F",silver:"#7C93AD",navy:"#
 const API_ENDPOINT = "";
 const PRAYER_ENDPOINT = API_ENDPOINT;
 const FELLOWSHIP_ENDPOINT = API_ENDPOINT;
-const SITE_VERSION = "2.1";
+const SITE_VERSION = "2.2";
 
 const NS="http://www.w3.org/2000/svg";
 const $=id=>document.getElementById(id);
@@ -882,7 +892,17 @@ ld_sched_lead:["Set the service times and which team is on duty. These travel in
  "Itakda ang oras ng serbisyo at kung aling team ang naka-duty. Kasama ito sa link, kaya pare-pareho ang nakikita ng lahat.",
  "I-set ang service times at kung anong team ang naka-duty. Kasama ito sa link, kaya pareho ang nakikita ng lahat."],
 ld_times:["Service times (one per line, 24-hour)","Oras ng serbisyo (isa bawat linya, 24-oras)","Service times (isa kada linya, 24-hour)"],
-ld_call:["Call time, minutes before","Call time, minuto bago","Call time, minutes bago"],
+ld_call:["Company Call, minutes before the service","Company Call, minuto bago ang serbisyo","Company Call, minutes bago ang service"],
+ld_huddle:["Huddle, minutes before the service","Huddle, minuto bago ang serbisyo","Huddle, minutes bago ang service"],
+ld_doors:["Open Doors, minutes before the service","Pagbukas ng pinto, minuto bago ang serbisyo","Open Doors, minutes bago ang service"],
+tl_huddle:["Huddle","Huddle","Huddle"],
+tl_call:["Company Call","Company Call","Company Call"],
+tl_doors:["Open Doors","Bukas ang mga pinto","Open Doors"],
+tl_svc:["Service starts","Simula ng serbisyo","Service start"],
+cd_next:["Next","Susunod","Susunod"],
+cd_svc:["Service","Serbisyo","Service"],
+cd_ontime:["Gentle reminder: be on time.","Paalala: maging nasa oras.","Gentle reminder: be on time."],
+g_timeline:["Sunday timeline","Takdang oras tuwing Linggo","Sunday timeline"],
 ld_duty:["Team on duty this Sunday","Team na naka-duty ngayong Linggo","Team na naka-duty ngayong Linggo"],
 ld_saved:["Saved. Copy the link to share it.","Naitala. Kopyahin ang link upang ibahagi.","Na-save na. I-copy ang link para ma-share."],
 f_about:["About","Tungkol","Tungkol"],
@@ -1098,7 +1118,7 @@ fl_ld:["Fellowship posts","Mga post sa samahan","Fellowship posts"],
 ld_roster:["Roster","Talaan","Roster"],
 ld_inbox:["Prayer inbox","Mga hiling","Prayer inbox"],
 ld_svc:["Service this Sunday","Serbisyo ngayong Linggo","Service ngayong Linggo"],
-ld_svc_ph:["e.g. Sunday, 6 Sept, 9AM","hal. Linggo, 6 Set, 9AM","Hal. Linggo, 6 Sept, 9AM"],
+ld_svc_ph:["e.g. Sunday, 6 Sept, 10AM","hal. Linggo, 6 Set, 10AM","Hal. Linggo, 6 Sept, 10AM"],
 ld_lead:["Type a name into each post, then copy the link and paste it in your group chat. When they open it they see their own post straight away.",
  "Isulat ang pangalan sa bawat pwesto, pagkatapos ay kopyahin ang link at i-paste sa inyong group chat. Pagbukas nila, makikita agad nila ang sarili nilang pwesto.",
  "Ilagay ang pangalan sa bawat pwesto, tapos i-copy ang link at i-paste sa GC. Pagbukas nila, makikita agad nila ang pwesto nila."],
@@ -2059,7 +2079,7 @@ function renderMe(){
       (chips?'<div class="chips">'+chips+"</div>":"")+
       (nx?'<div class="meta-chips">'+attireTag(nx.svc)+
         '<span class="attire"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'+
-        esc(t("cd_call"))+" "+esc(tf.format(nx.call))+" · "+esc(df.format(nx.svc))+"</span></div>":"")+
+        esc(t("tl_huddle"))+" "+esc(tf.format(nx.huddle))+" · "+esc(t("cd_svc"))+" "+esc(tf.format(nx.svc))+" · "+esc(df.format(nx.svc))+"</span></div>":"")+
       '<p class="desc">'+esc(postDesc(p))+"</p>"+
       '<div class="note">'+esc(t("confirm_tl"))+"</div>"+
       (isCounting(p)
@@ -2163,6 +2183,7 @@ function guideSections(){
     "<p>"+g("Arrive at least <b>one hour</b> before the service. It is hard to welcome others well if they arrive before you. Every serving team member attends the <b>Serving Team Huddle</b>: worship, prayer, service flow, and instructions.",
       "Dumating nang hindi bababa sa <b>isang oras</b> bago ang service. Mahirap mag-welcome nang maayos kung sila pa ang nauuna sa'yo. Lahat ng serving team ay dumadalo sa <b>Serving Team Huddle</b>: worship, panalangin, service flow, at instructions.",
       "Dumating nang hindi bababa sa <b>isang oras</b> bago ang serbisyo. Mahirap salubungin nang maayos ang iba kung nauna pa sila sa iyo. Lahat ng kasapi ng serving team ay dumadalo sa <b>Serving Team Huddle</b>: pagsamba, panalangin, daloy ng serbisyo, at mga tagubilin.")+"</p>"+
+    '<div class="note"><b>'+esc(t("g_timeline"))+"</b> · "+esc(t("cd_ontime"))+"<br>"+timelineLines()+"</div>"+
     '<div class="note">'+g("Serving begins with spiritual preparation, not just physical readiness.","Ang paglilingkod ay nagsisimula sa espirituwal na paghahanda, hindi lang sa pisikal.","Nagsisimula ang paglilingkod sa espirituwal na paghahanda, hindi lamang sa pisikal na kahandaan.")+"</div>"+
     h5(g("Prepare the venue","Ihanda ang venue","Ihanda ang lugar"))+
     ul([g("Lobby","Lobby"),g("Entrance doors","Entrance doors","Mga pinto sa pasukan"),g("Pulpit","Pulpit","Pulpito"),g("Restrooms","Restrooms","Mga palikuran"),g("Chairs with offering envelopes","Mga upuan na may offering envelopes","Mga upuan na may sobre ng handog")])+
@@ -2773,7 +2794,33 @@ function revealScan(){
    15. SERVICE SCHEDULE + COUNTDOWN
    ============================================================ */
 /* Leaders set these; they travel inside the share link. */
-let sched={day:0,times:["09:00"],callMins:60,duty:1,partner:2};
+/* Sunday timeline, set by the team (30 Aug 2026): Huddle 90 minutes before the service,
+   Company Call 60 before, Open Doors 15 before. For the 4:00 PM service that is 2:30, 3:00
+   and 3:45; the same arithmetic gives 8:30, 9:00 and 9:45 for the 10:00 AM service. */
+let sched={day:0,times:["10:00","16:00"],huddleMins:90,callMins:60,doorsMins:15,duty:1,partner:2};
+const STEP_ORDER=[["huddle","tl_huddle"],["call","tl_call"],["doors","tl_doors"],["svc","tl_svc"]];
+function milestones(svc){
+  const m=k=>new Date(svc.getTime()-(Number(sched[k])||0)*60000);
+  return {svc,huddle:m("huddleMins"),call:m("callMins"),doors:m("doorsMins")};
+}
+const sortedTimes=()=>sched.times.slice().sort((a,b)=>toMins(a)-toMins(b));
+const toMins=tm=>{const[h,m]=String(tm).split(":").map(Number);return (h||0)*60+(m||0);};
+/* the next step on the timeline that has not happened yet */
+function nextStep(n){
+  const now=new Date();
+  for(const [k,lbl] of STEP_ORDER){if(n[k]>now)return {key:k,label:lbl,at:n[k]};}
+  return {key:"svc",label:"tl_svc",at:n.svc};
+}
+const locale=()=>LANG==="en"?"en-PH":"fil-PH";
+const fmtTime=d=>new Intl.DateTimeFormat(locale(),{hour:"numeric",minute:"2-digit"}).format(d);
+/* one line per service: "10:00 AM Service: Huddle 8:30 AM · Company Call 9:00 AM · Open Doors 9:45 AM" */
+function timelineLines(){
+  return sortedTimes().map(tm=>{
+    const n=milestones(new Date(2026,0,4,Math.floor(toMins(tm)/60),toMins(tm)%60));
+    return "<b>"+esc(fmtTime(n.svc))+" "+esc(t("cd_svc"))+"</b>: "+esc(t("tl_huddle"))+" "+esc(fmtTime(n.huddle))+
+      " · "+esc(t("tl_call"))+" "+esc(fmtTime(n.call))+" · "+esc(t("tl_doors"))+" "+esc(fmtTime(n.doors));
+  }).join("<br>");
+}
 /* Communion Sunday = last Sunday of the month, in white (handbook p.7-8, p.15). */
 function isLastSundayOf(d){const n=new Date(d.getFullYear(),d.getMonth(),d.getDate()+7);return n.getMonth()!==d.getMonth();}
 const attireFor=d=>isLastSundayOf(d)?"white":"black";
@@ -2787,16 +2834,15 @@ function dutyFor(d){
   const weeks=Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate())-anchor)/(7*864e5));
   return ((sched.duty-1+weeks)%4+4)%4+1;
 }
+/* the next service that has not started yet, with its huddle / call / doors times */
 function nextService(){
   const now=new Date();
   for(let d=0;d<8;d++){
     const day=new Date(now.getFullYear(),now.getMonth(),now.getDate()+d);
     if(day.getDay()!==sched.day)continue;
-    for(const tm of sched.times){
-      const[h,m]=tm.split(":").map(Number);
-      const svc=new Date(day.getFullYear(),day.getMonth(),day.getDate(),h,m,0,0);
-      const call=new Date(svc.getTime()-sched.callMins*60000);
-      if(call>now)return{svc,call};
+    for(const tm of sortedTimes()){
+      const svc=new Date(day.getFullYear(),day.getMonth(),day.getDate(),Math.floor(toMins(tm)/60),toMins(tm)%60,0,0);
+      if(svc>now)return milestones(svc);
     }
   }
   return null;
@@ -2808,20 +2854,22 @@ function renderCountdown(){
   const n=nextService();
   if(!n){box.innerHTML='<div class="cdwrap"><div class="who"><p class="kick">'+esc(t("cd_kick"))+
     '</p><b>'+esc(t("cd_none"))+"</b></div></div>";return;}
-  const fmt=new Intl.DateTimeFormat(LANG==="en"?"en-PH":"fil-PH",
-    {weekday:"long",day:"numeric",month:"long",hour:"numeric",minute:"2-digit"});
-  box.innerHTML='<div class="cdwrap"><div class="who"><p class="kick">'+esc(t("cd_kick"))+"</p>"+
-    "<b>"+esc(fmt.format(n.svc))+"</b><span>"+esc(t("cd_call"))+" "+
-    new Intl.DateTimeFormat(LANG==="en"?"en-PH":"fil-PH",{hour:"numeric",minute:"2-digit"}).format(n.call)+
-    " · "+esc(t("cd_team"))+" "+dutyFor(n.svc)+"</span>"+
-    '<div style="margin-top:12px">'+attireTag(n.svc)+"</div></div>"+
+  const step=nextStep(n),now=new Date();
+  const dfmt=new Intl.DateTimeFormat(locale(),{weekday:"long",day:"numeric",month:"long"});
+  const rows=STEP_ORDER.map(([k,l])=>'<div class="'+(k===step.key?"next":(n[k]<=now?"past":""))+'"><i></i><b>'+
+    esc(fmtTime(n[k]))+"</b><span>"+esc(t(l))+"</span></div>").join("");
+  box.innerHTML='<div class="cdwrap"><div class="who"><p class="kick">'+esc(t("cd_next"))+": "+esc(t(step.label))+"</p>"+
+    "<b>"+esc(dfmt.format(step.at))+" · "+esc(fmtTime(step.at))+"</b>"+
+    "<span>"+esc(t("cd_svc"))+" "+esc(fmtTime(n.svc))+" · "+esc(t("cd_team"))+" "+dutyFor(n.svc)+"</span>"+
+    '<div class="tline">'+rows+"</div>"+
+    '<div class="cdtags">'+attireTag(n.svc)+'<span class="ontime">'+esc(t("cd_ontime"))+"</span></div></div>"+
     '<div class="cdunits" id="cdu"></div>'+
     '<button class="cta" data-v="me">'+esc(t("cd_cta"))+"</button></div>";
   const units=$("cdu");
   const labels=[t("cd_d"),t("cd_h"),t("cd_m"),t("cd_s")];
   units.innerHTML=labels.map((l,i)=>'<div class="cdu"><b id="cdv'+i+'">0</b><span>'+esc(l)+"</span></div>").join("");
   function tick(){
-    const ms=n.call-new Date();
+    const ms=step.at-new Date();
     if(ms<=0){renderCountdown();return;}
     const s=Math.floor(ms/1000);
     const v=[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60];
@@ -2900,7 +2948,7 @@ const STEPS=[
   ["what",()=>g("What ushering is","Ano ba ang ushering","Ano ang ushering"),()=>g("Why we open the doors, and what Scripture says about it.","Bakit namin binubuksan ang pinto, at ano ang sabi ng Salita tungkol dito.","Bakit natin binubuksan ang mga pinto, at ano ang sinasabi ng Kasulatan tungkol dito.")],
   ["heart",()=>g("The heart of an usher","Ang puso ng usher","Ang puso ng isang usher"),()=>g("Nine things every usher carries into the room.","Siyam na bagay na dala ng bawat usher pagpasok.","Siyam na bagay na dala ng bawat usher sa pagpasok.")],
   ["roles",()=>g("Your six responsibilities","Ang anim na responsibilidad mo","Ang anim na tungkulin mo"),()=>g("From welcoming people to keeping everyone safe.","Mula sa pagsalubong hanggang sa pagpapanatiling ligtas ng lahat.","Mula sa pagsalubong sa mga tao hanggang sa pag-iingat sa kaligtasan ng lahat.")],
-  ["before",()=>g("Before the service","Bago ang service","Bago ang serbisyo"),()=>g("Arrive an hour early. Huddle, supplies, venue, assignment.","Dumating one hour early. Huddle, supplies, venue, assignment.","Dumating nang isang oras na maaga. Huddle, kagamitan, lugar, takdang gawain.")],
+  ["before",()=>g("Before the service","Bago ang service","Bago ang serbisyo"),()=>g("Be on time for the huddle. Supplies, venue, assignment.","Maging on time sa huddle. Supplies, venue, assignment.","Maging nasa oras para sa huddle. Kagamitan, lugar, takdang gawain.")],
   ["dress",()=>g("Dress code","Dress code","Kasuotan"),()=>g("Black every Sunday. White on the last Sunday of the month.","Black tuwing Linggo. Puti sa huling Linggo ng buwan.","Itim tuwing Linggo. Puti sa huling Linggo ng buwan.")],
   ["during",()=>g("During the service","Habang nasa service","Habang may serbisyo"),()=>g("Seating, the offering, counting, staying at your post.","Seating, offering, pagbilang, at pananatili sa pwesto mo.","Pag-upo, handog, pagbibilang, at pananatili sa iyong pwesto.")],
   ["after",()=>g("After the service","Pagkatapos ng service","Pagkatapos ng serbisyo"),()=>g("First in, last out. Finish before you leave.","First in, last out. Tapusin bago umalis.","Unang pumasok, huling lumabas. Tapusin bago umalis.")],
@@ -3024,8 +3072,13 @@ function renderSched(slot){
   slot.innerHTML='<p class="lead" style="margin:14px 0 0;text-align:left">'+esc(t("ld_sched_lead"))+"</p>"+
     '<div class="field"><label for="scTimes">'+esc(t("ld_times"))+'</label>'+
       '<textarea id="scTimes" style="min-height:110px">'+esc(sched.times.join("\n"))+"</textarea></div>"+
+    '<div class="field"><label for="scHuddle">'+esc(t("ld_huddle"))+'</label>'+
+      '<input id="scHuddle" type="number" min="0" max="240" value="'+sched.huddleMins+'"></div>'+
     '<div class="field"><label for="scCall">'+esc(t("ld_call"))+'</label>'+
       '<input id="scCall" type="number" min="0" max="240" value="'+sched.callMins+'"></div>'+
+    '<div class="field"><label for="scDoors">'+esc(t("ld_doors"))+'</label>'+
+      '<input id="scDoors" type="number" min="0" max="240" value="'+sched.doorsMins+'"></div>'+
+    '<div class="note">'+timelineLines()+"</div>"+
     '<div class="field"><label for="scDuty">'+esc(t("ld_duty"))+'</label><select id="scDuty">'+
       [1,2,3,4].map(n=>'<option value="'+n+'"'+(sched.duty===n?" selected":"")+">"+esc(t("fl_team"))+" "+n+" · "+esc(t("rot_partner"))+" "+partnerOf(n)+"</option>").join("")+
       "</select></div>"+
@@ -3035,11 +3088,14 @@ function renderSched(slot){
     const times=$("scTimes").value.split(/\n+/).map(s=>s.trim())
       .filter(s=>/^([01]?\d|2[0-3]):[0-5]\d$/.test(s));
     if(times.length)sched.times=times;
-    sched.callMins=Math.max(0,Math.min(240,Number($("scCall").value)||60));
+    const mins=(id,dflt)=>{const v=Number($(id).value);return Math.max(0,Math.min(240,isNaN(v)?dflt:v));};
+    sched.huddleMins=mins("scHuddle",90);
+    sched.callMins=mins("scCall",60);
+    sched.doorsMins=mins("scDoors",15);
     sched.duty=Number($("scDuty").value)||1;
     sched.partner=partnerOf(sched.duty);
     try{history.replaceState(null,"",buildLink());}catch(e){}
-    renderCountdown();renderRotation();renderMe();toast(t("ld_saved"));
+    renderCountdown();renderRotation();renderMe();renderGuide();renderSched(slot);toast(t("ld_saved"));
   };
 }
 

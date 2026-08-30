@@ -107,8 +107,10 @@ production host, Drive link-sharing on the team's account, thumbnail URLs). Foll
    The site follows the table.
 5. "Partner Tithe Bag" is described as partnering the tithe-bag usher of the same section; the manual
    does not define it further.
-6. Service times are still the placeholder (Sunday 9:00 AM, call time 60 min). Set the real ones in
-   Leader tools → Schedule and re-share the link.
+6. Service times are real as of 30 Aug 2026 (from the team's own reminder): services 10:00 AM and
+   4:00 PM; Huddle 90 min before, Company Call 60 min before, Open Doors 15 min before. If there are
+   other Sunday services, add them in Leader tools → Schedule. The team on duty defaults to Team 1
+   until a leader sets it.
 
 ## How to work with me
 

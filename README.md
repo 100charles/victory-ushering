@@ -41,6 +41,12 @@ the posts, tap **Copy link** or **Share**, and paste the link into the group cha
 service name, campus and schedule are base64-encoded into the link's `#r=` hash. When an usher
 opens the link and taps their name once, their phone remembers the post.
 
+## Version 2.2 (30 Aug 2026)
+
+- Real Sunday timeline: services 10:00 AM and 4:00 PM; Huddle 90 min before, Company Call 60,
+  Open Doors 15. The countdown targets the next step and lists all four; the usher card shows the
+  huddle time; the handbook's "Before the service" lists the times; Schedule tool edits all three offsets.
+
 ## Version 2.1 (30 Aug 2026)
 
 - Live on GitHub Pages; repository created; `GO-LIVE.md` added.
