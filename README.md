@@ -1,16 +1,21 @@
-# Ushering Serving Team · Victory Malolos — team website
+# Ushering Serving Team · Victory Malolos - team website
+
+**Live:** https://100charles.github.io/victory-ushering/
 
 One self-contained `index.html` (no build step, no framework, no paid services) for the
 Ushering Serving Team: Sunday assignments, sanctuary maps for four campuses, the handbook,
 prayer requests and a team photo wall. Trilingual: Taglish (default), Tagalog, English.
+Hosted free on GitHub Pages from this repository; a push to `main` republishes in about a minute.
+See `GO-LIVE.md` for what is left to do before the prayer inbox and photo wall are used for real.
 
 ```
 victory-ushering/
-├── index.html                 ← the whole site. Upload this file to the host.
+├── index.html                 ← the whole site, served by GitHub Pages
+├── GO-LIVE.md                 ← what is done, what is left, how to publish changes
 ├── apps-script/
 │   ├── Code.gs                ← free Google Apps Script backend (prayer + photos)
 │   └── SETUP.md               ← 15-minute guide to go live (Sheet + Drive, ₱0)
-├── docs/
+├── docs/                      (local only, gitignored: church-internal)
 │   ├── BMT MANUAL 2026.pdf    ← source of truth for posts, duties, dress code, emergencies
 │   ├── COMMUNION.pdf          ← source of truth for the Communion positioning
 │   └── index.original-2026-08-30.html   ← the version this build started from
@@ -20,11 +25,14 @@ victory-ushering/
 
 ## Deploying
 
-`index.html` is a static file. Upload it anywhere that serves HTML (the current host, GitHub
-Pages, Netlify, Firebase Hosting free tier…). Nothing else is required for demo mode.
+The site is served by GitHub Pages from the `main` branch of this repository. To publish a change,
+edit `index.html` and either commit it in the GitHub web editor or run
+`git add -A && git commit -m "..." && git push` from this folder. It is live about a minute later.
+Bump `SITE_VERSION` in the file so the footer shows which version a phone has loaded.
 
 To make prayer requests reach the leaders and photos appear on everyone's phone, follow
-`apps-script/SETUP.md`, then set `API_ENDPOINT` near the top of the `<script>` block.
+`apps-script/SETUP.md`, then set `API_ENDPOINT` near the top of the `<script>` block and publish.
+`GO-LIVE.md` walks through all of it in plain language.
 
 ## How assignments work
 
@@ -33,12 +41,17 @@ the posts, tap **Copy link** or **Share**, and paste the link into the group cha
 service name, campus and schedule are base64-encoded into the link's `#r=` hash. When an usher
 opens the link and taps their name once, their phone remembers the post.
 
-## Version 2.0 — what changed (30 Aug 2026)
+## Version 2.1 (30 Aug 2026)
+
+- Live on GitHub Pages; repository created; `GO-LIVE.md` added.
+- All em dashes removed from the site text and documents (commas, colons or full stops instead).
+
+## Version 2.0 - what changed (30 Aug 2026)
 
 Corrections checked against the BMT Manual:
 
 - Satellite posts now match the handbook tables exactly (Longos/STMA U-2 & U-4 are *Partner*
-  Tithe Bag only; Longos U-5 is seating only; Matimbo U-1–U-4 count attendance).
+  Tithe Bag only; Longos U-5 is seating only; Matimbo U-1-U-4 count attendance).
 - Communion partner pairing is Team 1↔2 (AM) and Team 3↔4 (PM), not a 1→2→3→4 chain.
 - Communion bleacher captions no longer assert an entry side (the sheet does not give one).
 - Emergency section: English now available (was Tagalog-only); added the handbook's usher

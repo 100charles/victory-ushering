@@ -1,6 +1,6 @@
 /**
  * =====================================================================
- *  USHERING SERVING TEAM · Victory Malolos — backend (Google Apps Script)
+ *  USHERING SERVING TEAM · Victory Malolos - backend (Google Apps Script)
  * =====================================================================
  *  One free script, bound to one Google Sheet, that gives the site:
  *
@@ -11,7 +11,7 @@
  *  It costs nothing: Google Sheets, Drive and Apps Script are free for a
  *  team this size, and the script only runs when someone taps a button.
  *
- *  HOW TO INSTALL — see SETUP.md next to this file. Short version:
+ *  HOW TO INSTALL - see SETUP.md next to this file. Short version:
  *    1. New Google Sheet → Extensions → Apps Script → paste this file.
  *    2. Run  setup()  once (authorise when asked). Read the Settings tab.
  *    3. Deploy → New deployment → Web app → Execute as: Me →
@@ -31,7 +31,7 @@ var CFG = {
   SHEET_SETTINGS: "Settings",
   FEED_LIMIT:     80,          // newest photos returned to the wall
   INBOX_LIMIT:    400,         // newest prayer requests returned to leaders
-  MAX_IMG_CHARS:  1600000,     // ~1.2 MB of base64; the site sends ~40–200 KB
+  MAX_IMG_CHARS:  1600000,     // ~1.2 MB of base64; the site sends ~40-200 KB
   MAX_MSG: 1200, MAX_CAP: 400, MAX_NAME: 80, MAX_CONTACT: 120, MAX_NOTE: 600,
   THUMB_WIDTH:    1000         // Drive thumbnail width used by the wall
 };
@@ -232,7 +232,7 @@ function listPhotos_() {
   });
 }
 
-/** Base64 of one photo — only files this sheet knows about, so the script is never a general Drive proxy. */
+/** Base64 of one photo - only files this sheet knows about, so the script is never a general Drive proxy. */
 function imageData_(fileId) {
   fileId = String(fileId || "").replace(/[^A-Za-z0-9_-]/g, "");
   if (!fileId) return { ok: false, error: "bad_id" };
