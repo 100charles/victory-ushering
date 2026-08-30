@@ -1,0 +1,6 @@
+# the handbook PDFs stay local (church-internal); the site itself is public
+docs/*.pdf
+docs/index.original-*.html
+node_modules/
+.DS_Store
+Thumbs.db
