@@ -2,10 +2,10 @@
 
 **The website is live right now at:**
 
-## https://100charles.github.io/victory-ushering/
+## https://victory-malolos-ushering.vercel.app/
 
-You can send that link to the team today. It is hosted for free on GitHub Pages from the
-repository <https://github.com/100charles/victory-ushering>. There is nothing to pay, now or later.
+You can send that link to the team today. It is hosted for free on Vercel. There is nothing to
+pay, now or later. The older GitHub Pages link still works and forwards here.
 
 ---
 
@@ -96,18 +96,14 @@ the Team Leader said, and it is a small change.
 
 ## 5. How to publish a change to the website
 
-Any edit to `index.html` becomes live about one minute after it is saved to the repository.
+Edit `index.html` in the folder `Desktop\Agora\victory-ushering`, then publish it from Git Bash:
 
-**Option A, in the browser, no tools needed**
+```
+./publish.sh
+```
 
-1. Go to <https://github.com/100charles/victory-ushering>, open `index.html`, click the pencil (Edit).
-2. Make the change, click **Commit changes**, keep the defaults, commit.
-3. Wait a minute, then open the site and refresh. If a phone still shows the old version, pull down
-   to refresh or open the link again.
-
-**Option B, from this computer**
-
-The folder `Desktop\Agora\victory-ushering` is the repository. Edit the file, then:
+It uploads only `index.html` and is live in under a minute. If a phone still shows the old
+version, pull down to refresh or open the link again. To keep the history on GitHub too:
 
 ```
 git add -A
@@ -115,12 +111,14 @@ git commit -m "what you changed"
 git push
 ```
 
+Pushing to GitHub does not publish by itself; `./publish.sh` does.
+
 Tip: when you change the site, also bump `const SITE_VERSION = "2.0";` (for example to `2.1`). The
 footer shows the version, so you can tell on any phone whether it has the newest file.
 
 ## 6. Sharing the site with the team
 
-- Bare link for everyone: `https://100charles.github.io/victory-ushering/`
+- Bare link for everyone: `https://victory-malolos-ushering.vercel.app/`
 - Weekly roster link: made in Leader tools each week (Copy link or Share). It contains the names,
   service name and schedule. The newest link wins.
 - Add to home screen (Android Chrome): open the link, tap the three dots, tap **Add to Home screen**.
@@ -131,20 +129,19 @@ footer shows the version, so you can tell on any phone whether it has the newest
 ## 7. Optional: your own web address
 
 If the church or team owns a domain (for example `ushering.victorymalolos.org`), it can point at
-this site for free: in the repository, Settings > Pages > Custom domain, then add a CNAME record at
-the domain provider pointing to `100charles.github.io`. GitHub issues the HTTPS certificate itself.
+this site for free: in Vercel, open the project, Settings > Domains, add the domain, then add the
+DNS record Vercel shows at the domain provider. Vercel issues the HTTPS certificate itself.
 Not needed for the site to work.
 
 ## 8. What it costs
 
-Nothing. GitHub Pages is free for public repositories. Google Sheets, Drive and Apps Script are free
+Nothing. Vercel's free (Hobby) plan hosts the site. Google Sheets, Drive and Apps Script are free
 at this size (a resized photo is about 40 to 200 KB; a free Google account has 15 GB). The site never
 calls a paid service.
 
 ## 9. Privacy, in plain terms
 
-- The repository is public because free GitHub Pages requires it. It contains the site code and these
-  documents. It does **not** contain the handbook PDFs, any names, any prayer request, or the leader key.
+- The repository on GitHub is public. It contains the site code and these documents. It does **not** contain the handbook PDFs, any names, any prayer request, or the leader key.
 - Roster names travel only inside the links leaders share; they are not stored on any server.
 - Prayer requests go only to the team's Google Sheet, readable by whoever has the Sheet or the leader key.
 - Photos go to a Drive folder owned by the team's Google account; the site's Remove button also trashes
@@ -152,8 +149,8 @@ calls a paid service.
 
 ## 10. Checklist
 
-- [x] Website live on GitHub Pages
-- [x] Repository created, changes publish automatically
+- [x] Website live on Vercel (free), old GitHub Pages link forwards to it
+- [x] Repository created; `./publish.sh` publishes changes
 - [ ] Backend connected (`SETUP.md`), `API_ENDPOINT` set, status line says Connected
 - [ ] Leader key given to leaders only
 - [x] Real service times set (10:00 AM and 4:00 PM; Huddle 90, Company Call 60, Open Doors 15 minutes before)

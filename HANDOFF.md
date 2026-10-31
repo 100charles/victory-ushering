@@ -10,9 +10,10 @@ I'm on the **Ushering Serving Team at Victory Malolos** (Philippines). `index.ht
 website. It works and is deployed - read it before changing anything, and preserve what's there
 unless I ask otherwise.
 
-**Live site:** https://100charles.github.io/victory-ushering/ (GitHub Pages, free). The folder is a
-git repository; `git push` to `main` on <https://github.com/100charles/victory-ushering> republishes
-in about a minute. `GO-LIVE.md` lists what is still left to do (backend, real schedule, confirmations).
+**Live site:** https://victory-malolos-ushering.vercel.app/ (Vercel free plan; the address avoids the owner's name).
+Publish with `./publish.sh`, which uploads only `index.html`. The folder is also a git repository
+(`main` on GitHub keeps the history, but pushing does not publish). The old GitHub Pages link is
+served from the `gh-pages` branch and only forwards to the new address, keeping `?` and `#` data. `GO-LIVE.md` lists what is still left to do (backend, real schedule, confirmations).
 
 The two source documents it was built from are the **BMT Manual 2026** (Ushering Serving Team
 Handbook & Training Manual, 20 pages) and the **Communion positioning sheet**. They sit in `docs/`
@@ -24,7 +25,7 @@ them (pdftotext works on the manual) or ask me to re-upload them rather than gue
 
 One self-contained HTML file. No build step, no framework, no external JS. CSS in one `<style>`
 block, all JavaScript in a single IIFE in one `<script>` block. Fonts from Google Fonts (Cormorant
-Garamond for big headings, Figtree for everything else). Hosted as a static file on GitHub Pages.
+Garamond for big headings, Figtree for everything else). Hosted as a static file on Vercel (free), published with `./publish.sh`.
 House style: no em dashes and no "A · B" middle-dot strings in any text (use commas, colons or full
 stops); sentence case; short sentences.
 

@@ -1,16 +1,18 @@
 # Ushering Serving Team · Victory Malolos - team website
 
-**Live:** https://100charles.github.io/victory-ushering/
+**Live:** https://victory-malolos-ushering.vercel.app/
 
 One self-contained `index.html` (no build step, no framework, no paid services) for the
 Ushering Serving Team: Sunday assignments, sanctuary maps for four campuses, the handbook,
 prayer requests and a team photo wall. Trilingual: Taglish (default), Tagalog, English.
-Hosted free on GitHub Pages from this repository; a push to `main` republishes in about a minute.
+Hosted free on Vercel; publish with `./publish.sh` (it uploads only `index.html`). Pushing to
+GitHub does not publish. The old GitHub Pages link forwards to the new address.
 See `GO-LIVE.md` for what is left to do before the prayer inbox and photo wall are used for real.
 
 ```
 victory-ushering/
-├── index.html                 ← the whole site, served by GitHub Pages
+├── index.html                 ← the whole site, served by Vercel
+├── publish.sh                 ← publishes index.html (only) to the live site
 ├── GO-LIVE.md                 ← what is done, what is left, how to publish changes
 ├── apps-script/
 │   ├── Code.gs                ← free Google Apps Script backend (prayer + photos)
@@ -25,10 +27,13 @@ victory-ushering/
 
 ## Deploying
 
-The site is served by GitHub Pages from the `main` branch of this repository. To publish a change,
-edit `index.html` and either commit it in the GitHub web editor or run
-`git add -A && git commit -m "..." && git push` from this folder. It is live about a minute later.
+The site is served by Vercel (free plan) at https://victory-malolos-ushering.vercel.app/. To publish
+a change, edit `index.html` and run `./publish.sh` from this folder (Git Bash). It uploads only
+`index.html` and is live in under a minute. Pushing to GitHub keeps the history but does not publish.
 Bump `SITE_VERSION` in the file so the footer shows which version a phone has loaded.
+
+The old GitHub Pages address is served from the `gh-pages` branch and only forwards to the new one (keeping `?` and `#r=` roster data), so links already
+shared still work.
 
 To make prayer requests reach the leaders and photos appear on everyone's phone, follow
 `apps-script/SETUP.md`, then set `API_ENDPOINT` near the top of the `<script>` block and publish.
@@ -40,6 +45,11 @@ There is no database for the roster. Leaders open **Leader tools → Roster**, t
 the posts, tap **Copy link** or **Share**, and paste the link into the group chat. The roster,
 service name, campus and schedule are base64-encoded into the link's `#r=` hash. When an usher
 opens the link and taps their name once, their phone remembers the post.
+
+## Hosting move (31 Oct 2026)
+
+- Moved from GitHub Pages to Vercel so the address no longer shows a personal account name.
+  The old link forwards to the new one. The site file itself did not change.
 
 ## Version 3.0 (30 Oct 2026)
 
