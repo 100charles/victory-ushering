@@ -36,7 +36,7 @@ open from Home), a "This Sunday" ticket on Home, a "How to use this page" note o
 48px taps, Undo toasts instead of `confirm()` (Messenger's in-app browser blocks pop-ups), the phone's
 Back button walks back through pages, and For leaders is a checklist (times, names, send the link;
 then prayer inbox, photos, setup). Cormorant draws old-style figures, so anything with numbers uses
-`lining-nums` or Figtree. QA: `node qa/qa.js <path to index.html> <screenshot folder>` (294 checks,
+`lining-nums` or Figtree. QA: `node qa/qa.js <path to index.html> <screenshot folder>` (313 checks,
 uses Playwright from the SF Batch 3 project's node_modules and the installed Chrome).
 
 Structure of the script, in order:

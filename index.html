@@ -201,6 +201,31 @@ h2.sec{font-size:1.12em;color:var(--navy)}
 .why .vq b{display:block;font-family:var(--body);font-style:normal;font-weight:600;font-size:.82em;color:var(--mut);margin-top:4px}
 .why .btn{width:100%;margin-top:14px}
 
+/* two questions at the end of each handbook topic */
+.quiz{margin-top:18px;border-top:2px dashed var(--line);padding-top:14px}
+.quiz h4{display:flex;align-items:center;gap:8px;font-size:1.04em;color:var(--navy)}
+.quiz h4 .ic{color:var(--blue);width:22px;height:22px}
+.quiz .qsub{color:var(--mut);font-size:.92em;margin-top:2px}
+.qq{margin-top:16px}
+.qq .qt{font-weight:600}
+.qq .qt b{display:inline;margin-right:4px}
+.qo{display:block;width:100%;text-align:left;min-height:52px;padding:12px 14px;margin-top:8px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font:inherit;line-height:1.35;cursor:pointer}
+.qo.right{border-color:var(--ok);background:var(--okbg);color:var(--ok);font-weight:700}
+.qo.wrong{border-color:var(--bad);background:var(--badbg);color:#5E1422;text-decoration:line-through}
+.qo:disabled{cursor:default}
+.qq.ok .qo:not(.right){opacity:.55}
+.qf{font-size:.94em;font-weight:600;margin-top:6px;color:#5E1422}
+.qq.ok .qf{color:var(--ok)}
+.prayer{padding:0;overflow:hidden}
+.prayer summary{display:grid;grid-template-columns:24px 1fr 18px;gap:12px;align-items:center;padding:14px 16px;min-height:64px;cursor:pointer;list-style:none}
+.prayer summary::-webkit-details-marker{display:none}
+.prayer summary>.ic{color:var(--gold-ink)}
+.prayer summary b{display:block;color:var(--navy)}
+.prayer summary small{display:block;color:var(--mut);font-size:.88em}
+.prayer summary .chev{width:18px;height:18px;color:var(--mut);transition:transform .2s}
+.prayer[open] summary .chev{transform:rotate(90deg)}
+.prayer .abody{padding:0 16px 16px}
+
 /* link list */
 .links{background:#fff;border:1.5px solid var(--line);border-radius:16px;overflow:hidden}
 .links button{display:grid;grid-template-columns:28px 1fr 18px;gap:12px;align-items:center;width:100%;text-align:left;border:0;background:none;padding:14px 16px;border-bottom:1px solid var(--line);min-height:68px}
@@ -589,6 +614,7 @@ html.touring{overscroll-behavior:none}
     <input id="gFind" class="inp" type="search" autocomplete="off" enterkeyhint="search"></div>
   <div class="tasks" id="guideList"></div>
   <p class="empty-note" id="gEmpty" hidden></p>
+  <div id="gPrayer"></div>
 </div></div></section>
 
 <section class="page" id="v-pray"><div class="gut"><div class="col stack">
@@ -642,7 +668,7 @@ const TCOL={ice:"#3E93DF",gold:"#C9A24B",aqua:"#2E9C9F",silver:"#7C93AD",navy:"#
 const API_ENDPOINT = "";
 const PRAYER_ENDPOINT = API_ENDPOINT;
 const FELLOWSHIP_ENDPOINT = API_ENDPOINT;
-const SITE_VERSION = "3.1";
+const SITE_VERSION = "3.2";
 
 const NS="http://www.w3.org/2000/svg";
 const $=id=>document.getElementById(id);
@@ -747,7 +773,7 @@ tour_start:["Take a quick tour","Subukan ang maikling tour","Take a quick tour"]
 tour_again:["Take the tour again","Ulitin ang tour","Ulitin ang tour"],
 learn_h:["New usher? Start here","Bago ka? Magsimula rito","Bago ka? Simulan dito"],
 learn_done_h:["You know the basics","Alam mo na ang mga pangunahin","Alam mo na ang basics"],
-learn_n:["{a} of {b} read","{a} sa {b} ang nabasa","{a} of {b} ang nabasa"],
+learn_n:["{a} of {b} done","{a} sa {b} ang tapos","{a} of {b} ang tapos"],
 learn_go:["Continue: {x}","Ituloy: {x}","Ituloy: {x}"],
 learn_all:["Open the handbook","Buksan ang gabay","Buksan ang handbook"],
 ln_emerg:["Emergency","Emergency","Emergency"],
@@ -841,9 +867,15 @@ lg_support:["Leaders and admin","Lider at admin","Leaders at admin"],
 /* handbook */
 g_h:["Handbook","Gabay","Handbook"],
 g_p:["Short lessons for every usher.","Maiikling aralin para sa bawat usher.","Short lessons para sa bawat usher."],
-how_guide:["Tap a topic to open it. A green check means you have read it.",
- "Pindutin ang paksa para buksan. Ang berdeng tsek ay nabasa mo na.",
- "I-tap ang topic para buksan. Ang green check ay nabasa mo na."],
+how_guide:["Open a topic and read it, then answer the 2 questions at the end. A green check means you are done.",
+ "Buksan at basahin ang paksa, saka sagutin ang 2 tanong sa dulo. Ang berdeng tsek ay tapos ka na.",
+ "Buksan at basahin ang topic, tapos sagutin ang 2 tanong sa dulo. Ang green check ay tapos ka na."],
+qz_h:["Check yourself","Subukan ang sarili","Quick check"],
+qz_sub:["Answer 2 questions to finish this topic.","Sagutin ang 2 tanong para matapos ang paksang ito.","Sagutin ang 2 tanong para matapos ang topic na ito."],
+qz_right:["Correct!","Tama!","Tama!"],
+qz_wrong:["Not quite. Read the part above again, then pick another answer.","Hindi pa tama. Basahin muli ang nasa itaas, saka pumili ng ibang sagot.","Hindi pa. Basahin ulit ang nasa taas, tapos pumili ng ibang sagot."],
+qz_passed:["You finished this topic.","Natapos mo na ang paksang ito.","Tapos mo na ang topic na ito."],
+qz_done:["Well done! This topic now has a green check.","Mahusay! May berdeng tsek na ang paksang ito.","Galing! May green check na ang topic na ito."],
 g_find:["Search the handbook","Hanapin sa gabay","Hanapin sa handbook"],
 g_none:["Nothing found. Try <b>dress</b>, <b>tithe</b>, <b>fire</b>, or a post code.","Walang nakita. Subukan ang <b>damit</b>, <b>ikapu</b>, <b>sunog</b>, o code ng pwesto.","Walang nakita. Subukan ang <b>dress</b>, <b>tithe</b>, <b>sunog</b>, o post code."],
 
@@ -1782,6 +1814,11 @@ function guideSections(){
     ul([g("Watch for latecomers. Most come during the worship songs.","Bantayan ang mga late. Kadalasan dumarating sila habang worship songs.","Bantayan ang mga nahuhuli. Kadalasan dumarating sila habang umaawit."),
       g("During preaching, two ushers help latecomers quietly.","Habang preaching, dalawang usher ang tahimik na tumutulong sa mga late.","Habang nangangaral, dalawang usher ang tahimik na tumutulong sa mga nahuhuli."),
       g("Sit inside your block so you can help fast.","Umupo sa loob ng block mo para mabilis kang makatulong.","Umupo sa loob ng iyong block upang mabilis kang makatulong.")])+
+    h5(g("Helping people find a seat","Pag-assist sa upuan","Pagtulong sa paghanap ng upuan"))+
+    ul([g("Invite people toward the front, but let them choose.","Yayain sila sa harap, pero sila pa rin ang pipili.","Anyayahan sila sa harapan, ngunit sila pa rin ang pipili."),
+      g("Keep the back rows for latecomers, seniors, PWDs, pregnant women and families with small children.","Itabi ang likurang rows para sa late, seniors, PWD, buntis at pamilyang may maliliit na bata.","Ilaan ang mga hulihang hanay sa nahuhuli, matatanda, PWD, buntis at pamilyang may maliliit na anak."),
+      g("Walk a few steps ahead, then put your hand on the row you offer.","Mauna nang kaunti, tapos ipatong ang kamay sa row na ibinibigay mo.","Mauna nang kaunti, saka ipatong ang kamay sa hanay na iniaalok mo."),
+      g("Do not move or correct people who are already seated.","Huwag ilipat o itama ang nakaupo na.")])+
     h5(g("The offering","Ang offering","Ang handog"))+
     ul([g("Stand at the end of the rows in your section. Pass the bag every other row.","Tumayo sa dulo ng rows sa section mo. Ipasa ang bag, salitan kada row.","Tumayo sa dulo ng mga hanay sa iyong seksyon. Ipasa ang supot, salitan kada hanay."),
       g("Watch the bag the whole time, then bring it to the Usher Lead.","Bantayan ang bag buong oras, tapos dalhin sa Usher Lead.","Bantayan ang supot buong oras, saka dalhin sa Usher Lead."),
@@ -1797,14 +1834,14 @@ function guideSections(){
       g("<i>3-2-1 or Spiritual Family:</i> join in, but stay alert.","<i>3-2-1 o Spiritual Family:</i> sumali, pero alerto pa rin.","<i>3-2-1 o Spiritual Family:</i> makilahok, ngunit manatiling alerto."),
       g("<i>Doxology:</i> sing along.","<i>Doxology:</i> kumanta rin.","<i>Doxology:</i> umawit din.")])],
 
-   ["seating",g("Seating tips","Seating tips","Mga tip sa pag-upo"),ICE,
-    ul([g("Invite people toward the front, but let them choose.","Yayain sila sa harap, pero sila pa rin ang pipili.","Anyayahan sila sa harapan, ngunit sila pa rin ang pipili."),
-      g("Keep the back rows for latecomers, seniors, PWDs, pregnant women and families with small children.","Itabi ang likurang rows para sa late, seniors, PWD, buntis at pamilyang may maliliit na bata.","Ilaan ang mga hulihang hanay sa nahuhuli, matatanda, PWD, buntis at pamilyang may maliliit na anak."),
-      g("Walk a few steps ahead so they can follow.","Mauna nang kaunti para masundan ka nila.","Mauna nang kaunti upang masundan ka nila."),
-      g("Put your hand on the row you offer, and face the person.","Ipatong ang kamay sa row na ibinibigay mo, at humarap sa tao.","Ipatong ang kamay sa hanay na iniaalok mo, at humarap sa tao."),
-      g("No holding hands or arm-linking.","Walang hawak o akbay.","Walang paghawak o pag-akbay."),
-      g("Do not take over from an usher who is already helping someone.","Huwag agawin ang inaasikaso ng ibang usher.","Huwag agawin ang tinutulungan na ng ibang usher."),
-      g("Do not move or correct people who are already seated. Keep serving with grace.","Huwag ilipat o itama ang nakaupo na. Magpatuloy nang may grace.","Huwag ilipat o itama ang nakaupo na. Magpatuloy nang may biyaya.")])],
+   ["after",g("After the service","Pagkatapos ng service","Pagkatapos ng serbisyo"),ICE,
+    ul([g("Check the lobby, Bibles, doors, restrooms and chairs.","I-check ang lobby, Bibles, pinto, restrooms at upuan.","Suriin ang lobby, mga Bibliya, pinto, palikuran at upuan."),
+      g("Refill the envelopes, Bibles and other materials.","Punan ulit ang envelopes, Bibles at iba pang materials.","Punan muli ang mga sobre, Bibliya at iba pang kagamitan."),
+      g("Turn in the Worship Service Form on time.","I-submit ang Worship Service Form nang on time.","Isumite ang Worship Service Form sa tamang oras."),
+      g("Keep lost and found items safe, and write down where they were found.","Ingatan ang lost and found items, at isulat kung saan nakita.","Ingatan ang mga naiwang gamit, at itala kung saan nakita."),
+      g("Stay until every task is done, then join the post-service huddle.","Manatili hanggang tapos ang lahat, tapos sumali sa post-service huddle.","Manatili hanggang matapos ang lahat, saka dumalo sa post-service huddle.")])+
+    '<div class="note"><b>'+g("First in, last out.","First in, last out.","Unang pumasok, huling lumabas.")+"</b> "+
+    g("Finishing well matters as much as coming early.","Kasinghalaga ng pagdating nang maaga ang pagtatapos nang maayos.")+"</div>"],
 
    ["comm",g("Communion Sunday","Communion Sunday","Linggo ng Komunyon"),GOLD,
     '<div class="note"><b>'+g("44 ushers in white, every Communion Sunday at the Complex.","44 ushers na naka-white, tuwing Communion Sunday sa Complex.","44 na usher na nakaputi, tuwing Linggo ng Komunyon sa Complex.")+"</b> "+
@@ -1841,40 +1878,93 @@ function guideSections(){
       "Tumulong nang mabilis at tahimik. Humingi ng tulong sa doktor o nurse na naroon. Kung hindi makahinga o nawalan ng malay, tumawag agad sa emergency services at sabihan ang church leaders.")+"</p>"+
     '<div class="note">'+g("Doctor, nurse or EMT? Tell your Ushering Leader so you can be called on.","Doktor, nurse o EMT ka ba? Sabihin sa Ushering Leader mo para matawag ka kung kailangan.")+"</div>"],
 
-   ["posts",g("All posts and duties","Lahat ng posts at gawain","Lahat ng pwesto at tungkulin"),SILVER,postsHTML()],
-
-   ["quick",g("Usher's quick reminder","Usher's quick reminder","Mabilisang paalala sa usher"),GOLD,
-    ul([
-     "<b>"+g("Pray first","Manalangin muna")+"</b>: "+g("depend on God before, during and after every service.","umasa sa Diyos bago, habang, at pagkatapos ng bawat service.","umasa sa Diyos bago, habang, at pagkatapos ng bawat serbisyo."),
-     "<b>"+g("Serve with joy","Maglingkod nang may galak")+"</b>: "+g("let every smile reflect the love of Christ.","hayaang ipakita ng bawat ngiti ang pag-ibig ni Kristo."),
-     "<b>"+g("Be early","Mag-maaga","Maging maaga")+"</b>: "+g("arrive prepared and ready.","dumating nang handa."),
-     "<b>"+g("Be attentive","Maging alerto")+"</b>: "+g("anticipate needs before people ask.","asahan ang pangangailangan bago pa humingi.","asahan ang pangangailangan bago pa man humingi ang mga tao."),
-     "<b>"+g("Show hospitality","Magpakita ng hospitality","Magpakita ng mabuting pagtanggap")+"</b>: "+g("make every person feel welcomed and cared for.","padamhin sa bawat isa na welcome at inaalagaan sila.","iparamdam sa bawat isa na malugod silang tinatanggap at inaalagaan."),
-     "<b>"+g("Maintain excellence","Panatilihin ang excellence","Panatilihin ang kahusayan")+"</b>: "+g("serve faithfully and with integrity.","maglingkod nang tapat at may integridad."),
-     "<b>"+g("Protect the worship environment","Bantayan ang worship environment","Ingatan ang kapaligiran ng pagsamba")+"</b>: "+g("safe, orderly, distraction-free.","ligtas, maayos, walang distractions.","ligtas, maayos, walang abala."),
-     "<b>"+g("Work as one team","Isang team","Kumilos bilang isang pangkat")+"</b>: "+g("communicate, support, follow leadership.","mag-communicate, magsuportahan, sumunod sa leadership.","makipag-ugnayan, magsuportahan, sumunod sa pamunuan."),
-     "<b>"+g("Finish well","Tapusin nang maayos")+"</b>: "+g("complete your duties and attend the post-service huddle.","tapusin ang gawain mo at dumalo sa post-service huddle.","tapusin ang iyong tungkulin at dumalo sa post-service huddle."),
-     "<b>"+g("Remember who you serve","Alalahanin kung sino ang pinaglilingkuran mo")+"</b>: "+g("every act of service is worship to God.","bawat paglilingkod ay pagsamba sa Diyos.")
-    ])],
-
-   ["after",g("After the service","Pagkatapos ng service","Pagkatapos ng serbisyo"),ICE,
-    ul([g("Check the lobby, Bibles, doors, restrooms and chairs.","I-check ang lobby, Bibles, pinto, restrooms at upuan.","Suriin ang lobby, mga Bibliya, pinto, palikuran at upuan."),
-      g("Refill the envelopes, Bibles and other materials.","Punan ulit ang envelopes, Bibles at iba pang materials.","Punan muli ang mga sobre, Bibliya at iba pang kagamitan."),
-      g("Turn in the Worship Service Form on time.","I-submit ang Worship Service Form nang on time.","Isumite ang Worship Service Form sa tamang oras."),
-      g("Keep lost and found items safe, and write down where they were found.","Ingatan ang lost and found items, at isulat kung saan nakita.","Ingatan ang mga naiwang gamit, at itala kung saan nakita."),
-      g("Stay until every task is done, then join the post-service huddle.","Manatili hanggang tapos ang lahat, tapos sumali sa post-service huddle.","Manatili hanggang matapos ang lahat, saka dumalo sa post-service huddle.")])+
-    '<div class="note"><b>'+g("First in, last out.","First in, last out.","Unang pumasok, huling lumabas.")+"</b> "+
-    g("Finishing well matters as much as coming early.","Kasinghalaga ng pagdating nang maaga ang pagtatapos nang maayos.")+"</div>"],
-
-   ["prayer",g("An usher's prayer","Panalangin ng usher","Panalangin ng isang usher"),GOLD,
+   ["posts",g("All posts and duties","Lahat ng posts at gawain","Lahat ng pwesto at tungkulin"),SILVER,postsHTML()]
+  ];
+  return sections;
+}
+/* the prayer is not a lesson, so it sits under the topics as its own card */
+function prayerHTML(){
+  return '<details class="card prayer"><summary>'+ic("heart")+"<span><b>"+esc(g("An usher's prayer","Panalangin ng usher","Panalangin ng isang usher"))+"</b><small>"+
+    esc(g("A prayer before you serve.","Panalangin bago maglingkod."))+"</small></span>"+ic("chev","chev")+'</summary><div class="abody">'+
     "<p>"+g("Heavenly Father,","Ama sa Langit,")+"</p>"+
     "<p>"+g("Thank You for the privilege of serving in Your house. Fill my heart with humility, love, wisdom and joy as I welcome and care for every person You bring. Help me serve with excellence, integrity and a Christlike attitude in every responsibility.",
       "Salamat sa pribilehiyong makapaglingkod sa Iyong bahay. Punuin Mo ang puso ko ng kapakumbabaan, pag-ibig, karunungan at galak habang sinasalubong at inaalagaan ko ang bawat taong Iyong dinadala. Tulungan Mo akong maglingkod nang may excellence, integridad at Christlike na pag-uugali sa bawat responsibilidad.")+"</p>"+
     "<p>"+g("May my words, actions and example point others to You. Use me to help create an atmosphere where people can encounter Your presence without distraction. Teach me to work faithfully with my team and honor You in all that I do.",
       "Nawa'y ituro ng aking mga salita, kilos at halimbawa ang iba patungo sa Iyo. Gamitin Mo ako upang makatulong sa paglikha ng kapaligiran kung saan makakatagpo ng mga tao ang Iyong presensya nang walang abala. Turuan Mo akong magtrabaho nang tapat kasama ang aking team at parangalan Ka sa lahat ng aking ginagawa.")+"</p>"+
-    "<p>"+g("May everything I do bring glory to Your name. In Jesus' name, Amen.","Nawa'y ang lahat ng aking ginagawa ay magdala ng kaluwalhatian sa Iyong pangalan. Sa pangalan ni Hesus, Amen.")+"</p>"]
-  ];
-  return sections;
+    "<p>"+g("May everything I do bring glory to Your name. In Jesus' name, Amen.","Nawa'y ang lahat ng aking ginagawa ay magdala ng kaluwalhatian sa Iyong pangalan. Sa pangalan ni Hesus, Amen.")+"</p>"+"</div></details>";
+}
+/* two questions per topic; the topic gets its green check only when both are right */
+const QZ={
+ what:()=>[
+  [g("What does the word usher mean?","Ano ang ibig sabihin ng salitang usher?","Ano ang kahulugan ng salitang usher?"),
+   [g("Singer","Singer","Mang-aawit"),g("Doorkeeper","Doorkeeper","Tagapagbantay ng pinto"),g("Security guard","Security guard","Guwardiya")],1],
+  [g("Why do we make God's house welcoming, safe and orderly?","Bakit natin ginagawang welcoming, ligtas at maayos ang bahay ng Diyos?","Bakit natin ginagawang malugod, ligtas at maayos ang bahay ng Diyos?"),
+   [g("So the church looks nice","Para maganda tingnan ang church","Upang maganda tingnan ang simbahan"),g("So we can manage people","Para ma-manage natin ang mga tao","Upang mapamahalaan natin ang mga tao"),g("So people can worship and meet Jesus","Para makasamba ang mga tao at makilala si Hesus","Upang makasamba ang mga tao at makilala si Hesus")],2]],
+ heart:()=>[
+  [g("An usher is not just a volunteer. An usher is a…","Ang usher ay hindi lang volunteer. Ang usher ay isang…","Ang usher ay hindi lamang boluntaryo. Ang usher ay isang…"),
+   [g("Minister","Ministro"),g("Guard","Guard","Bantay"),g("Manager","Manager","Tagapamahala")],0],
+  [g("What does True Humility mean?","Ano ang ibig sabihin ng True Humility?","Ano ang kahulugan ng True Humility?"),
+   [g("Stay only at your own post","Sa pwesto mo lang ikaw","Sa iyong pwesto ka lamang"),g("Let others do the small tasks","Hayaan sa iba ang maliliit na gawain","Ipaubaya sa iba ang maliliit na gawain"),g("No task is beneath you","Walang gawaing mababa sa'yo","Walang gawaing mababa para sa iyo")],2]],
+ roles:()=>[
+  [g("How many responsibilities does an usher have?","Ilan ang responsibilidad ng usher?","Ilan ang tungkulin ng usher?"),
+   [g("Three","Tatlo"),g("Six","Anim"),g("Ten","Sampu")],1],
+  [g("Which one is an usher's responsibility?","Alin ang responsibilidad ng usher?","Alin ang tungkulin ng usher?"),
+   [g("Lead the worship songs","Mag-lead ng worship songs","Manguna sa awit ng pagsamba"),g("Preach the sermon","Mag-preach","Mangaral"),g("Welcome people","Salubungin ang mga tao")],2]],
+ before:()=>[
+  [g("How early should you come?","Gaano kaaga ka dapat dumating?"),
+   [g("At least one hour before the service","Hindi bababa sa isang oras bago ang service","Hindi bababa sa isang oras bago ang serbisyo"),g("15 minutes before","15 minutes bago","15 minuto bago"),g("Right on time","Saktong oras","Eksaktong oras")],0],
+  [g("When should you be at your post?","Kailan ka dapat nasa pwesto mo?","Kailan ka dapat nasa iyong pwesto?"),
+   [g("When the preaching starts","Pag nagsimula na ang preaching","Kapag nagsimula na ang pangangaral"),g("15 minutes before the service","15 minutes bago ang service","15 minuto bago ang serbisyo"),g("After the offering","Pagkatapos ng offering","Pagkatapos ng handog")],1]],
+ dress:()=>[
+  [g("What do ushers wear on the last Sunday of the month?","Ano ang suot ng usher sa huling Linggo ng buwan?","Ano ang isinusuot ng usher sa huling Linggo ng buwan?"),
+   [g("Black","Black","Itim"),g("White","White","Puti"),g("Any colour","Kahit anong kulay")],1],
+  [g("Can you wear a T-shirt?","Pwede ba ang T-shirt?","Maaari bang mag-T-shirt?"),
+   [g("Yes, any T-shirt","Oo, kahit anong T-shirt"),g("Never","Hindi kailanman"),g("Only with a blazer, jacket or cardigan","Kung may blazer, jacket o cardigan lang","Kung may blazer, jacket o cardigan lamang")],2]],
+ during:()=>[
+  [g("During the offering, can you put someone's envelope in the bag for them?","Sa offering, pwede mo bang ilagay ang envelope ng iba sa bag para sa kanila?","Sa handog, maaari mo bang ilagay ang sobre ng iba sa supot para sa kanila?"),
+   [g("No, never","Hindi, kailanman","Hindi kailanman"),g("Yes, to help them","Oo, para makatulong"),g("Only for seniors","Para sa seniors lang","Para sa matatanda lamang")],0],
+  [g("Who are the back rows kept for?","Para kanino ang likurang rows?","Para kanino ang mga hulihang hanay?"),
+   [g("Ushers only","Para sa ushers lang","Para sa mga usher lamang"),g("Church leaders","Para sa church leaders","Para sa mga pinuno ng iglesya"),g("Latecomers, seniors, PWDs and families with small children","Late, seniors, PWD at pamilyang may maliliit na bata","Nahuhuli, matatanda, PWD at pamilyang may maliliit na anak")],2]],
+ after:()=>[
+  [g("What does “First in, last out” mean?","Ano ang ibig sabihin ng “First in, last out”?","Ano ang kahulugan ng “Unang pumasok, huling lumabas”?"),
+   [g("Leave as soon as the service ends","Umalis agad pagkatapos ng service","Umalis agad pagkatapos ng serbisyo"),g("Come early, and stay until every task is done","Dumating nang maaga, at manatili hanggang tapos ang lahat","Dumating nang maaga, at manatili hanggang matapos ang lahat"),g("Come last and leave first","Huling dumating, unang umalis")],1],
+  [g("What do you turn in after the service?","Ano ang isusumite mo pagkatapos ng service?","Ano ang isusumite mo pagkatapos ng serbisyo?"),
+   [g("The Worship Service Form","Ang Worship Service Form"),g("Your ministry ID","Ang ministry ID mo","Ang iyong ministry ID"),g("The Bibles","Ang mga Bible","Ang mga Bibliya")],0]],
+ comm:()=>[
+  [g("How many ushers serve on Communion Sunday at the Complex?","Ilang usher ang naglilingkod sa Communion Sunday sa Complex?","Ilang usher ang naglilingkod sa Linggo ng Komunyon sa Complex?"),
+   ["10","20","44"],2],
+  [g("In the main hall, how many ushers cover every four rows?","Sa main hall, ilang usher kada apat na row?","Sa pangunahing bulwagan, ilang usher sa bawat apat na hanay?"),
+   [g("Two","Dalawa"),g("One","Isa"),g("Four","Apat")],0]],
+ emerg:()=>[
+  [g("What do you do during an earthquake?","Ano ang gagawin mo habang may lindol?"),
+   [g("Run outside right away","Tumakbo agad palabas"),g("Drop, take cover, and hold on","Yumuko, magkubli, at kumapit"),g("Take the elevator down","Sumakay sa elevator pababa")],1],
+  [g("There is a fire. Should you go back for your things?","May sunog. Babalikan mo ba ang gamit mo?","May sunog. Babalikan mo ba ang iyong gamit?"),
+   [g("No. Go to the Assembly Area.","Hindi. Dumiretso sa Assembly Area."),g("Yes, if it is quick","Oo, kung mabilis lang","Oo, kung mabilis lamang"),g("Yes, for your phone","Oo, para sa phone mo","Oo, para sa iyong telepono")],0]],
+ posts:()=>[
+  [g("Plans can change. Where do you confirm your post?","Pwedeng magbago ang plano. Saan mo iko-confirm ang pwesto mo?","Maaaring magbago ang plano. Saan mo kukumpirmahin ang iyong pwesto?"),
+   [g("With a guest","Sa isang bisita"),g("On this app only","Sa app lang","Sa app lamang"),g("With your Team Leader at the huddle","Sa Team Leader mo sa huddle","Sa iyong Team Leader sa huddle")],2],
+  [g("When counting people, how do you count children and adults?","Sa pagbilang, paano bibilangin ang mga bata at matanda?","Sa pagbibilang, paano bibilangin ang mga bata at matatanda?"),
+   [g("Together, as one number","Pinagsama, iisang bilang","Pinagsama sa iisang bilang"),g("Separately","Magkahiwalay","Hiwalay"),g("Only the adults","Matatanda lang","Matatanda lamang")],1]]
+};
+function quizHTML(id){
+  const qs=QZ[id]?QZ[id]():null;if(!qs)return "";
+  const done=!!obState()[id];
+  return '<div class="quiz" data-qz="'+id+'"><h4>'+ic("ok")+esc(t("qz_h"))+'</h4><p class="qsub">'+esc(t(done?"qz_passed":"qz_sub"))+"</p>"+
+    qs.map(([q,o,a],i)=>'<div class="qq'+(done?" ok":"")+'" data-i="'+i+'"><p class="qt"><b>'+(i+1)+".</b> "+esc(q)+"</p>"+
+      o.map((x,k)=>'<button type="button" class="qo'+(done&&k===a?" right":"")+'" data-k="'+k+'"'+(done?" disabled":"")+">"+esc(x)+"</button>").join("")+
+      '<p class="qf" aria-live="polite">'+(done?esc(t("qz_right")):"")+"</p></div>").join("")+"</div>";
+}
+function answerQuiz(o){
+  const box=o.closest(".quiz"),id=box.dataset.qz,qq=o.closest(".qq"),i=Number(qq.dataset.i),k=Number(o.dataset.k);
+  if(k===QZ[id]()[i][2]){
+    qq.querySelectorAll(".qo").forEach(b=>b.disabled=true);
+    o.classList.add("right");qq.classList.add("ok");qq.querySelector(".qf").textContent=t("qz_right");
+    if([...box.querySelectorAll(".qq")].every(x=>x.classList.contains("ok"))&&!obState()[id]){
+      box.querySelector(".qsub").textContent=t("qz_passed");markRead(id);toast(t("qz_done"));
+    }
+  }else{
+    o.classList.add("wrong");o.disabled=true;qq.querySelector(".qf").textContent=t("qz_wrong");
+  }
 }
 /* ============================================================
    10. PRAYER
@@ -2013,8 +2103,9 @@ const STEPS=[
   ["roles",()=>g("Your six responsibilities","Ang anim na responsibilidad mo","Ang anim na tungkulin mo"),()=>g("Welcome people, keep them safe.","Salubungin at ingatan ang mga tao.")],
   ["before",()=>g("Before the service","Bago ang service","Bago ang serbisyo"),()=>g("Come early. Huddle, supplies, your post.","Dumating nang maaga. Huddle, supplies, pwesto mo.","Dumating nang maaga. Huddle, kagamitan, pwesto mo.")],
   ["dress",()=>g("Dress code","Dress code","Kasuotan"),()=>g("Black every Sunday. White on the last Sunday of the month.","Black tuwing Linggo. Puti sa huling Linggo ng buwan.","Itim tuwing Linggo. Puti sa huling Linggo ng buwan.")],
-  ["during",()=>g("During the service","Habang nasa service","Habang may serbisyo"),()=>g("Welcome, offering, counting.","Pagbati, offering, pagbilang.","Pagbati, handog, pagbibilang.")],
+  ["during",()=>g("During the service","Habang nasa service","Habang may serbisyo"),()=>g("Welcome, seating, offering, counting.","Pagbati, seating, offering, pagbilang.","Pagbati, pag-upo, handog, pagbibilang.")],
   ["after",()=>g("After the service","Pagkatapos ng service","Pagkatapos ng serbisyo"),()=>g("First in, last out. Finish before you leave.","First in, last out. Tapusin bago umalis.","Unang pumasok, huling lumabas. Tapusin bago umalis.")],
+  ["comm",()=>g("Communion Sunday","Communion Sunday","Linggo ng Komunyon"),()=>g("44 ushers in white.","44 ushers na naka-white.","44 na usher na nakaputi.")],
   ["emerg",()=>g("Emergency procedures","Emergency procedures","Mga hakbang sa emergency"),()=>g("Fire, earthquake, medical.","Sunog, lindol, medical.","Sunog, lindol, medikal.")],
   ["posts",()=>g("Find your post","Hanapin ang pwesto mo","Hanapin ang iyong pwesto"),()=>g("All 26 posts at the Complex, plus the other campuses.","Lahat ng 26 posts sa Complex, kasama ang ibang campus.","Lahat ng 26 na pwesto sa Complex, kasama ang ibang kampus.")]
 ];
@@ -2255,14 +2346,11 @@ const GSUM={
  roles:()=>g("Welcome people, keep them safe.","Salubungin at ingatan ang mga tao."),
  before:()=>g("Arrive early. Huddle, supplies, your post.","Dumating nang maaga. Huddle, supplies, pwesto mo.","Dumating nang maaga. Huddle, kagamitan, pwesto mo."),
  dress:()=>g("Black every Sunday. White on the last Sunday.","Black tuwing Linggo. White sa huling Linggo.","Itim tuwing Linggo. Puti sa huling Linggo."),
- during:()=>g("Welcome, offering, counting.","Pagbati, offering, pagbilang.","Pagbati, handog, pagbibilang."),
- seating:()=>g("How to seat people well.","Paano mag-seat nang maayos.","Paano maayos na paupuin ang mga tao."),
+ during:()=>g("Welcome, seating, offering, counting.","Pagbati, seating, offering, pagbilang.","Pagbati, pag-upo, handog, pagbibilang."),
  comm:()=>g("44 ushers in white. Who starts where.","44 ushers na naka-white. Saan magsisimula.","44 na usher na nakaputi. Kung saan magsisimula."),
  emerg:()=>g("Fire, earthquake, medical.","Sunog, lindol, medical.","Sunog, lindol, medikal."),
  posts:()=>g("Every post and its duties, all campuses.","Lahat ng posts at duties, lahat ng campus.","Lahat ng pwesto at tungkulin, lahat ng kampus."),
- quick:()=>g("Ten short reminders.","Sampung maikling paalala.","Sampung maikling paalala."),
- after:()=>g("First in, last out.","First in, last out.","Unang pumasok, huling lumabas."),
- prayer:()=>g("A prayer before you serve.","Panalangin bago maglingkod.","Panalangin bago maglingkod.")
+ after:()=>g("First in, last out.","First in, last out.","Unang pumasok, huling lumabas.")
 };
 let gOpen=null;
 function postsHTML(){
@@ -2287,8 +2375,9 @@ function renderGuide(){
       '<button type="button" aria-expanded="'+open+'" aria-controls="gp-'+id+'">'+
       '<span class="tick'+(read?" done":red?" red":"")+'">'+(read?ic("check"):red?ic("alert"):'<i class="dotc"></i>')+"</span>"+
       "<span><b>"+esc(title)+"</b><small>"+esc(GSUM[id]?GSUM[id]():"")+"</small></span>"+ic("chev","chev")+"</button>"+
-      '<div class="panel abody" id="gp-'+id+'"'+(open?"":" hidden")+">"+body+"</div></div>";
+      '<div class="panel abody" id="gp-'+id+'"'+(open?"":" hidden")+">"+body+quizHTML(id)+"</div></div>";
   }).join("");
+  $("gPrayer").innerHTML=prayerHTML();
   const q=f.value.trim();if(q)f.dispatchEvent(new Event("input"));
 }
 function markRead(id){
@@ -2305,18 +2394,18 @@ function setGuideOpen(id,o){
     s.querySelector(".panel").hidden=!on;s.querySelector("button").setAttribute("aria-expanded",on?"true":"false");
   });
   if(!id)return;
-  if(o.mark)markRead(id);
   if(o.scroll){const s=document.querySelector('.gsec[data-g="'+id+'"]');if(s)s.scrollIntoView({block:"start",behavior:smooth()});}
 }
 $("guideList").addEventListener("click",e=>{
+  const o=e.target.closest(".qo");if(o){answerQuiz(o);return;}
   const b=e.target.closest(".gsec>button");if(!b)return;
   const id=b.parentElement.dataset.g;
-  setGuideOpen(gOpen===id?null:id,{mark:true,scroll:gOpen!==id});
+  setGuideOpen(gOpen===id?null:id,{scroll:gOpen!==id});
 });
 function openGuide(id,postKey){
   $("gFind").value="";$("gEmpty").hidden=true;
   $("guideList").querySelectorAll(".gsec").forEach(s=>s.hidden=false);
-  setGuideOpen(id,{mark:true});
+  setGuideOpen(id,{});
   setTimeout(()=>{
     const s=document.querySelector('.gsec[data-g="'+id+'"]');if(!s)return;
     const target=postKey?s.querySelector('[data-post="'+CSS.escape(postKey)+'"]'):null;
@@ -2950,7 +3039,7 @@ function tourSteps(){return [
   {v:"home",sel:["#why"],h:t("why_k"),
    p:g("Read this first. It is the reason behind everything we do.","Basahin muna ito. Ito ang dahilan ng lahat ng ginagawa natin.","Basahin muna ito. Ito ang dahilan ng lahat ng ating ginagawa.")},
   {v:"home",sel:["#learn"],h:t("learn_h"),
-   p:g("Short lessons for new ushers. Tap the button to read the next one. The door fills with light as you go.","Maiikling aralin para sa bagong usher. I-tap ang button para sa susunod. Napupuno ng liwanag ang pinto habang nagbabasa ka.","Maiikling aralin para sa bagong usher. Pindutin ang button para sa susunod. Napupuno ng liwanag ang pinto habang nagbabasa ka.")},
+   p:g("Short lessons for new ushers, each with 2 easy questions. The door fills with light as you finish them.","Maiikling aralin para sa bagong usher, may 2 madaling tanong bawat isa. Napupuno ng liwanag ang pinto habang natatapos mo.","Maiikling aralin para sa bagong usher, may 2 madaling tanong bawat isa. Napupuno ng liwanag ang pinto habang natatapos mo ang mga ito.")},
   {v:"home",sel:["#ticket"],h:g("Every Sunday","Tuwing Linggo"),
    p:g("What to wear and what time to come. The next step glows gold.","Ano ang isusuot at anong oras darating. Naka-gold ang susunod na step.","Ano ang isusuot at anong oras darating. Kulay ginto ang susunod na hakbang.")},
   {v:"map",sel:["#stagebox"],h:t("map_h"),

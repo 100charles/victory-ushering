@@ -46,6 +46,15 @@ the posts, tap **Copy link** or **Share**, and paste the link into the group cha
 service name, campus and schedule are base64-encoded into the link's `#r=` hash. When an usher
 opens the link and taps their name once, their phone remembers the post.
 
+## Version 3.2 (31 Oct 2026)
+
+- The handbook has 10 topics instead of 13: the quick reminder is gone (it repeated the nine values),
+  seating tips are part of During the service, and the usher's prayer is a card under the topics.
+- Every topic ends with 2 questions (3 big choices each). A topic gets its green check, and counts in
+  "Learn the basics" on Home, only when both are right. A wrong answer says so gently and lets you try again.
+  Opening a topic alone no longer counts as reading it. Communion Sunday is now one of the basics (10).
+- QA: 313 checks, including passing all 20 questions.
+
 ## Version 3.1 (31 Oct 2026)
 
 - Home now leads with the three things a new usher needs: why we usher (with Psalm 84:10),

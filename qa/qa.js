@@ -15,6 +15,13 @@ async function go(page,v){
   else await page.evaluate(v=>document.querySelector(`nav.tabs [data-v="${v}"]`).click(),v);
   await sleep(220);
 }
+async function passQuiz(page,id){
+  for(let i=0;i<2;i++)for(let k=0;k<3;k++){
+    const q=`#guideList .gsec[data-g="${id}"] .qq[data-i="${i}"]`;
+    if(await page.evaluate(q=>document.querySelector(q).classList.contains("ok"),q))break;
+    const b=await page.$(`${q} .qo[data-k="${k}"]:not([disabled])`);if(b){await b.click();await sleep(60);}
+  }
+}
 async function fresh(browser,vp,opts){
   const ctx=await browser.newContext(Object.assign({viewport:{width:vp.w,height:vp.h},deviceScaleFactor:1,isMobile:vp.w<800,hasTouch:vp.w<800,locale:"en-PH",timezoneId:"Asia/Manila"},opts||{}));
   const page=await ctx.newPage();
@@ -93,7 +100,10 @@ async function fresh(browser,vp,opts){
   // handbook: search, open, tick, learn progress
   await go(page,"guide");
   const nSec=await page.evaluate(()=>document.querySelectorAll("#guideList .gsec").length);
-  ok(nSec===13,`guide: 13 topics (${nSec})`);
+  ok(nSec===10,`guide: 10 topics (${nSec})`);
+  ok(await page.evaluate(()=>!document.querySelector('#guideList .gsec[data-g="quick"],#guideList .gsec[data-g="seating"],#guideList .gsec[data-g="prayer"]')),"guide: quick reminder, seating and prayer are no longer separate topics");
+  ok(await page.evaluate(()=>{const q=[...document.querySelectorAll("#guideList .gsec .quiz")];return q.length===10&&q.every(z=>z.querySelectorAll(".qq").length===2&&[...z.querySelectorAll(".qq")].every(x=>x.querySelectorAll(".qo").length===3));}),"guide: every topic ends with 2 questions of 3 choices");
+  ok(await page.evaluate(()=>!!document.querySelector("#gPrayer details.prayer")),"guide: the prayer is a card under the topics");
   ok(await page.evaluate(()=>!document.querySelector('#guideList .gsec[data-g="tech"]')),"guide: maintainer section not in the handbook");
   await page.fill("#gFind","sunog");await sleep(150);
   ok(await page.evaluate(()=>[...document.querySelectorAll("#guideList .gsec")].filter(s=>!s.hidden).length>=1&&document.querySelector('#guideList .gsec[data-g="emerg"]:not([hidden])')!==null),"guide: search finds emergency");
@@ -104,17 +114,35 @@ async function fresh(browser,vp,opts){
   ok(await page.evaluate(()=>[...document.querySelectorAll("#guideList .gsec")].every(s=>!s.hidden)),"guide: clearing shows all");
   await page.click('#guideList .gsec[data-g="dress"]>button');await sleep(300);
   ok(await page.evaluate(()=>document.querySelector('#guideList .gsec[data-g="dress"]').classList.contains("open")),"guide: tapping opens dress code");
-  ok(await page.evaluate(()=>document.querySelector('#guideList .gsec[data-g="dress"] .tick').classList.contains("done")),"guide: read topic gets a check");
+  ok(await page.evaluate(()=>!document.querySelector('#guideList .gsec[data-g="dress"] .tick').classList.contains("done")),"guide: opening a topic alone does not tick it");
+  await page.click('#guideList .gsec[data-g="dress"] .qq[data-i="0"] .qo[data-k="0"]');await sleep(150);
+  ok(await page.evaluate(()=>{const q=document.querySelector('#guideList .gsec[data-g="dress"] .qq[data-i="0"]');return q.querySelector('.qo[data-k="0"]').classList.contains("wrong")&&q.querySelector(".qf").textContent.length>5&&!q.classList.contains("ok");}),"quiz: a wrong answer says so and lets you try again");
+  ok(await page.evaluate(()=>!document.querySelector('#guideList .gsec[data-g="dress"] .tick').classList.contains("done")),"quiz: no check after a wrong answer");
+  await passQuiz(page,"dress");
+  ok(await page.evaluate(()=>document.querySelector('#guideList .gsec[data-g="dress"] .tick').classList.contains("done")),"quiz: both right gives the topic its check");
+  ok(await page.evaluate(()=>!!document.querySelector(".toast")),"quiz: a well-done message shows");
   await page.click('#guideList .gsec[data-g="what"]>button');await sleep(300);
   ok(await page.evaluate(()=>!document.querySelector('#guideList .gsec[data-g="dress"]').classList.contains("open")),"guide: only one topic open at a time");
+  await passQuiz(page,"what");
   await go(page,"home");
-  ok((await page.textContent("#learn p")).includes("2"),"home: learn progress counts 2 read");
+  ok((await page.textContent("#learn p")).includes("2"),"home: learn progress counts 2 done");
   await page.click("#learnGo");await sleep(400);
   ok(await page.evaluate(()=>document.getElementById("v-guide").classList.contains("on")&&!!document.querySelector("#guideList .gsec.open")),"home: Continue opens the next unread topic");
 
   // emergency quick link
   await go(page,"home");await page.click('#homeLinks [data-go="emerg"]');await sleep(300);
   ok(await page.evaluate(()=>document.querySelector('#guideList .gsec[data-g="emerg"]').classList.contains("open")),"home: Emergency link opens that topic");
+  // every answer key is right: pass all ten topics, then Home says the basics are done
+  for(const id of ["what","heart","roles","before","dress","during","after","comm","emerg","posts"]){
+    await page.click(`#guideList .gsec[data-g="${id}"]>button`).catch(()=>{});await sleep(120);
+    if(!(await page.evaluate(id=>document.querySelector(`#guideList .gsec[data-g="${id}"]`).classList.contains("open"),id)))await page.click(`#guideList .gsec[data-g="${id}"]>button`);
+    await passQuiz(page,id);
+    ok(await page.evaluate(id=>document.querySelector(`#guideList .gsec[data-g="${id}"] .tick`).classList.contains("done"),id),`quiz: ${id} can be passed`);
+  }
+  await go(page,"home");
+  ok((await page.textContent("#learn p")).includes("10")&&/Alam mo na|know the basics/i.test(await page.textContent("#learn h2")),"home: all 10 done shows You know the basics");
+  await page.reload();await sleep(700);await go(page,"guide");
+  ok(await page.evaluate(()=>document.querySelectorAll("#guideList .tick.done").length===10&&document.querySelectorAll("#guideList .qo.right").length===20),"quiz: finished topics stay finished after a reload");
 
   // phone Back button walks pages
   await go(page,"home");await go(page,"map");
