@@ -41,6 +41,21 @@ the posts, tap **Copy link** or **Share**, and paste the link into the group cha
 service name, campus and schedule are base64-encoded into the link's `#r=` hash. When an usher
 opens the link and taps their name once, their phone remembers the post.
 
+## Version 3.0 (30 Oct 2026)
+
+- Redesigned after the SF Batch 3 Hub: calm, light, mobile-first, for older ushers on phones.
+- Bottom tab bar; a "This Sunday" card on Home (duty team, what to wear, huddle and call times with
+  a live countdown, pick 10 AM or 4 PM); "How to use this page" on every page; a guided tour;
+  an Aa button for bigger text; every tap target at least 48px; shorter wording in all three languages.
+- Handbook topics open one at a time and get a check once read; Home shows "Learn the basics"
+  progress (the door fills with light) and a direct Emergency link.
+- Map has + / − / Whole map buttons for people who cannot pinch; My post lists duties as short items.
+- For leaders is a checklist: times and duty team, names for each post, send the link; then the
+  prayer inbox, photo removal and setup.
+- No pop-up confirms (Messenger blocks them): removals show Undo for 5 seconds instead.
+- The phone's Back button goes to the previous page instead of leaving the site.
+- QA: `node qa/qa.js <path to index.html> <screenshot folder>` runs 287 checks at 360px, 390px and desktop.
+
 ## Version 2.2 (30 Aug 2026)
 
 - Real Sunday timeline: services 10:00 AM and 4:00 PM; Huddle 90 min before, Company Call 60,

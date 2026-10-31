@@ -23,9 +23,20 @@ them (pdftotext works on the manual) or ask me to re-upload them rather than gue
 ## What the file is
 
 One self-contained HTML file. No build step, no framework, no external JS. CSS in one `<style>`
-block, all JavaScript in a single IIFE in one `<script>` block. Fonts from Google Fonts (Cinzel,
-Cormorant Garamond, Inter). Hosted as a static file on GitHub Pages. House style: no em dashes in
-any text (use commas, colons or full stops).
+block, all JavaScript in a single IIFE in one `<script>` block. Fonts from Google Fonts (Cormorant
+Garamond for big headings, Figtree for everything else). Hosted as a static file on GitHub Pages.
+House style: no em dashes and no "A · B" middle-dot strings in any text (use commas, colons or full
+stops); sentence case; short sentences.
+
+**v3.0 (30 Oct 2026) redesign, after the SF Batch 3 Hub:** navy and gold header and hero, light
+reading surface, bottom tab bar (Home, My post, Map, Handbook, Prayer; Team photos and For leaders
+open from Home), a "This Sunday" ticket on Home, a "How to use this page" note on every page, a
+9-step guided tour (`startTour`, remembered in `vm_us_tour`), an Aa bigger-text button (`vm_us_big`),
+48px taps, Undo toasts instead of `confirm()` (Messenger's in-app browser blocks pop-ups), the phone's
+Back button walks back through pages, and For leaders is a checklist (times, names, send the link;
+then prayer inbox, photos, setup). Cormorant draws old-style figures, so anything with numbers uses
+`lining-nums` or Figtree. QA: `node qa/qa.js <path to index.html> <screenshot folder>` (287 checks,
+uses Playwright from the SF Batch 3 project's node_modules and the installed Chrome).
 
 Structure of the script, in order:
 1. Config (`API_ENDPOINT`, `PRAYER_ENDPOINT`, `FELLOWSHIP_ENDPOINT`, `SITE_VERSION`), DOM/SVG helpers,
@@ -120,8 +131,9 @@ about our services, teams or schedule. When you finish, test it - render it at 3
 check for console errors and horizontal overflow, and tell me what you actually verified versus what
 you assumed.
 
-Aesthetics stay as they are: dark navy, gold accents, Cormorant Garamond headlines, Cinzel for small
-caps labels, Inter for body. Premium but calm. Functionality matters more than polish.
+Aesthetics (v3.0): navy and gold brand on top, light calm reading surface, Cormorant Garamond for big
+headings, Figtree for reading. One memorable moment (the doors opening on Home); motion only in
+response to taps. Minimal, premium, easy for older ushers. Functionality matters more than polish.
 
 ---
 
