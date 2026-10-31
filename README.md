@@ -46,6 +46,18 @@ the posts, tap **Copy link** or **Share**, and paste the link into the group cha
 service name, campus and schedule are base64-encoded into the link's `#r=` hash. When an usher
 opens the link and taps their name once, their phone remembers the post.
 
+## Version 3.1 (31 Oct 2026)
+
+- Home now leads with the three things a new usher needs: why we usher (with Psalm 84:10),
+  the basics to learn, and the map of assignments. The Sunday card keeps what to wear and the times.
+- No duty team number anywhere: the Team on duty headline, the Next Sundays rotation list and the
+  leader's duty team setting are gone.
+- The tour starts with what the app is for, then walks through Why, the basics, the Sunday card,
+  the map, My post, the tabs and the Aa button (9 steps).
+- Shorter wording everywhere for older volunteers: page notes, and a tighter handbook with the
+  same facts from the BMT Manual.
+- QA: 294 checks.
+
 ## Hosting move (31 Oct 2026)
 
 - Moved from GitHub Pages to Vercel so the address no longer shows a personal account name.

@@ -53,7 +53,16 @@ async function fresh(browser,vp,opts){
   // doors open, hero text present
   ok(await page.evaluate(()=>document.getElementById("doors").classList.contains("open")),"home: doors opened");
   ok((await page.textContent("#heroDay")).length>6,"home: date shows");
-  ok(await page.evaluate(()=>!!document.querySelector("#ticket h2")&&/Team \d/.test(document.querySelector("#ticket h2").textContent)),"home: ticket names the duty team");
+  ok(await page.evaluate(()=>/black|white|itim|puti/i.test(document.querySelector("#ticket h2").textContent)),"home: Sunday card says what to wear");
+  ok(await page.evaluate(()=>!/Team \d/.test(document.getElementById("v-home").innerText)),"home: no duty team number anywhere on Home");
+  ok(await page.evaluate(()=>{const k=[...document.querySelectorAll("#v-home .col > *")].map(n=>n.id).filter(Boolean);return k.indexOf("why")<k.indexOf("learn")&&k.indexOf("learn")<k.indexOf("mapLinks")&&k.indexOf("mapLinks")<k.indexOf("ticket");}),"home: order is Why, Learn the basics, Map, Sunday card");
+  ok(await page.evaluate(()=>!!document.querySelector("#why h2")&&!!document.querySelector("#why .vq")),"home: Why we usher card with its verse");
+  await page.click("#whyGo");await sleep(400);
+  ok(await page.evaluate(()=>document.getElementById("v-guide").classList.contains("on")&&!!document.querySelector('#guideList .gsec.open[data-g="what"]')),"home: Read why we usher opens that handbook topic");
+  await go(page,"home");
+  await page.click('#mapLinks [data-v="map"]');await sleep(300);
+  ok(await page.evaluate(()=>document.getElementById("v-map").classList.contains("on")),"home: map card opens the Map of assignments");
+  await go(page,"home");
   ok(await page.evaluate(()=>document.querySelectorAll("#ticket .tline li").length===4),"home: four timeline steps");
   ok(await page.evaluate(()=>!!document.querySelector("#ticket .tline li.next")),"home: one step marked next");
   // service switch on the ticket
@@ -119,9 +128,10 @@ async function fresh(browser,vp,opts){
   ok(await page.evaluate(()=>document.querySelector("#lt-sched").classList.contains("open")),"leader: schedule opens");
   await page.fill("#scTimes","10:00\nabc");await page.click("#scSave");await sleep(150);
   ok((await page.textContent("#scErr")).length>3,"leader: bad time is named, not saved");
-  await page.fill("#scTimes","10:00\n16:00");await page.click('input[name="scDuty"][value="3"]+span');await page.click("#scSave");await sleep(300);
+  await page.fill("#scTimes","9:00\n16:00");await page.click("#scSave");await sleep(300);
   ok(await page.evaluate(()=>location.hash.includes("r=")),"leader: schedule saved into the link");
-  ok(await page.evaluate(()=>document.querySelector("#lt-sched small").textContent.includes("Team 3")),"leader: summary shows Team 3");
+  ok(await page.evaluate(()=>document.querySelector("#lt-sched small").textContent.includes("9:00")),"leader: summary shows the new times");
+  ok(await page.evaluate(()=>!document.querySelector('#lp-sched input[name="scDuty"]')),"leader: no duty team to set");
   await page.click('[data-lt="roster"]');await sleep(300);
   ok(await page.evaluate(()=>!document.querySelector("#lt-sched").classList.contains("open")),"leader: opening roster closes schedule");
   await page.fill("#rn-L1L","Ate Nena Reyes");await page.fill("#rn-GREETERS","Kuya Jun");
@@ -140,7 +150,7 @@ async function fresh(browser,vp,opts){
   await ctx.close();
   ({ctx,page,errs}=await fresh(browser,vp));
   await page.goto(link);await sleep(900);
-  ok(await page.evaluate(()=>document.querySelector("#ticket h2").textContent.includes("Team 3")),"link: duty team travels in the link");
+  ok(await page.evaluate(()=>document.querySelector("#ticket .meta").textContent.includes("9:00")),"link: service times travel in the link");
   await go(page,"me");
   ok(await page.evaluate(()=>document.querySelector("#meList .pick b").textContent.includes("Nena")),"link: named usher listed first");
   await page.fill("#meFind","jun");await sleep(100);
@@ -222,6 +232,7 @@ async function fresh(browser,vp,opts){
   await go(page,"home");
   await page.click("#tourStart");await sleep(500);
   ok(await page.evaluate(()=>!!document.querySelector(".tour-card")&&!!document.querySelector(".tour-spot:not([hidden])")),"tour: opens with a highlight");
+  ok(/bagong usher|new ushers/i.test(await page.textContent("#tourP")),"tour: step 1 says what the app is for");
   let steps=0;
   for(let i=0;i<12;i++){
     const last=await page.evaluate(()=>document.getElementById("tourNext").textContent);
